@@ -1,0 +1,18 @@
+# ide files
+.vscode
+.idea
+
+# virtualenvs
+.env/
+.venv/
+
+# python cache
+*.pyc
+__pycache__/
+
+# jupyter notebook
+*.ipynb
+.ipynb_checkpoints
+
+# Code Coverage
+.coverage
