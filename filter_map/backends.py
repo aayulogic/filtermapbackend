@@ -1,9 +1,5 @@
-import datetime
 from collections import OrderedDict
 
-import pytz
-
-from django.db.models import F
 from django.forms.utils import pretty_name
 from django.template import loader
 from django_filters import utils as dj_filters_utils
@@ -11,6 +7,7 @@ from django_filters.rest_framework import FilterSet
 from rest_framework.filters import BaseFilterBackend
 
 from .utils import inverse_mapping, get_applicable_filters
+
 
 class FilterMapFilterSet(FilterSet):
     """
@@ -173,6 +170,7 @@ class FilterMapBackend(BaseFilterBackend):
     def clean_field_name(field_name):
         if isinstance(field_name, tuple):
             return field_name[0], [field_name[1]]
+
         # just these for now, add more when needed
         ops = ["date__gte", "date__lte", "gte", "lte", "gt", "lt"]
         for op in ops:
