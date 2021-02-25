@@ -1,10 +1,14 @@
 from collections import OrderedDict
+from typing import Union, Type, Tuple, List, ValuesView
 
+from django.db.models import QuerySet
 from django.forms.utils import pretty_name
 from django.template import loader
 from django_filters import utils as dj_filters_utils
 from django_filters.rest_framework import FilterSet
 from rest_framework.filters import BaseFilterBackend
+from rest_framework.request import Request
+from rest_framework.generics import GenericAPIView
 
 from .utils import inverse_mapping, get_applicable_filters
 
@@ -20,7 +24,7 @@ class FilterMapFilterSet(FilterSet):
     class Meta:
         fil_map = {}
 
-    def filter_queryset(self, queryset):
+    def filter_queryset(self, queryset: QuerySet) -> QuerySet:
         """
         Override filter queryset to use our own get_applicable_filters
         """
@@ -60,26 +64,36 @@ class FilterMapBackend(BaseFilterBackend):
     """
     template = 'django_filters/rest_framework/form.html'
 
-    def get_raise_exception(self, view):
+    def get_raise_exception(self, view: GenericAPIView) -> bool:
+        """Should return True/False, decides to raise ValidationError when bad data are sent to filter"""
         if hasattr(view, "get_raise_filter_exception"):
             return view.get_raise_filter_exceptions()
         return getattr(view, "raise_filter_exception", True)
 
-    def get_filterset(self, request, queryset, view):
+    def get_filterset(self, request: Request, queryset: QuerySet, view: GenericAPIView) -> Union[FilterSet, None]:
+        """
+        Returns filterset instance
+        """
         filterset_class = self.get_filterset_class(view, self.get_filter_map(view))
         if filterset_class is None:
             return None
         kwargs = self.get_filterset_kwargs(request, queryset, view)
         return filterset_class(**kwargs)
 
-    def get_filterset_kwargs(self, request, queryset, view):
+    def get_filterset_kwargs(self, request: Request, queryset: QuerySet, view: GenericAPIView) -> dict:
+        """
+        Returns kwargs for instantiating filterset
+        """
         return {
             'data': request.query_params,
             'queryset': queryset,
             'request': request,
         }
 
-    def filter_queryset(self, request, queryset, view):
+    def filter_queryset(self, request: Request, queryset: QuerySet, view: GenericAPIView) -> QuerySet:
+        """
+        Return a filtered queryset
+        """
         filterset = self.get_filterset(request, queryset, view)
         if filterset is None:
             return queryset
@@ -89,7 +103,8 @@ class FilterMapBackend(BaseFilterBackend):
         return filterset.qs
 
     @staticmethod
-    def get_filter_map(view):
+    def get_filter_map(view: GenericAPIView) -> Union[dict, None]:
+        """Get filter map from view instance"""
         filter_map_func = getattr(view, 'get_filter_map', None)
         filter_map_var = getattr(view, 'filter_map', None)
 
@@ -102,7 +117,8 @@ class FilterMapBackend(BaseFilterBackend):
         if filter_map_var:
             return filter_map_var
 
-    def to_html(self, request, queryset, view):
+    def to_html(self, request: Request, queryset: QuerySet, view: GenericAPIView) -> str:
+        """Render filter map to html form fields"""
         filter_map = self.get_filter_map(view)
         if filter_map:
             template = loader.get_template(self.template)
@@ -114,8 +130,10 @@ class FilterMapBackend(BaseFilterBackend):
             return ''
 
     @staticmethod
-    def get_filterset_class(view, filter_map):
-        # build own filterset class for the filter
+    def get_filterset_class(view: GenericAPIView, filter_map: dict) -> Type[FilterMapFilterSet]:
+        """
+        build own filterset class for the filter
+        """
         model_class = view.get_queryset().model
         filter_map = filter_map or dict()
 
@@ -147,7 +165,7 @@ class FilterMapBackend(BaseFilterBackend):
         return Filterset
 
     @staticmethod
-    def clean_field_names(field_names):
+    def clean_field_names(field_names: Union[ValuesView, list]) -> dict:
         """Clean field names from query string to (field_name, expression) form"""
         real_fields = set()
         map_ = dict()
@@ -167,7 +185,10 @@ class FilterMapBackend(BaseFilterBackend):
         return filters
 
     @staticmethod
-    def clean_field_name(field_name):
+    def clean_field_name(field_name: Union[str, tuple]) -> Tuple[str, List[str]]:
+        """
+        Clean field name: Convert field expression to ("field_name", ["operation"])
+        """
         if isinstance(field_name, tuple):
             return field_name[0], [field_name[1]]
 
