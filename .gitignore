@@ -16,3 +16,4 @@ __pycache__/
 
 # Code Coverage
 .coverage
+.pytest_cache/
