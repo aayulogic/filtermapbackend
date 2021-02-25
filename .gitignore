@@ -18,7 +18,10 @@ __pycache__/
 .coverage
 
 # other dependent files while running test cases
-.eggs/
 .pytest_cache/
-filter_map.egg-info
 
+# build files
+.eggs/
+*.egg-info
+*.egg
+build/
