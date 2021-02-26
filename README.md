@@ -4,12 +4,36 @@
 
 ## Table Of Content
 * [Introduction](#introduction)
+* [Installation](#installation)  
 * [Usage](#usage)  
 * [TODOS](#todos)
 
 ## Introduction
 
 FilterMapBackend is FilterBackend  like DjangoFilterBackend
+
+## Installation
+### Using pip
+Currently, drf-filtermapbackend is not released to PYPI. \
+So you can only install
+it directly from github by running
+```shell
+pip install git+https://github.com/aayulogic/filtermapbackend@master
+```
+### Build using setup.py
+1. Clone the repo
+```shell
+git clone https://github.com/aayulogic/filtermapbackend
+cd filtermapbackend
+```
+2. Install requirements
+```shell
+pip install -r requirementst.txt
+```
+3. Install using `setup.py`
+```shell
+python setup.py install
+```
 
 ## Usage
 Example Usage
