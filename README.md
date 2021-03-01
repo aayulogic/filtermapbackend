@@ -6,11 +6,11 @@
 * [Introduction](#introduction)
 * [Installation](#installation)  
 * [Usage](#usage)  
-* [TODOS](#todos)
 
 ## Introduction
+FilterBackend which takes mapping of query params to field name.
 
-FilterMapBackend is FilterBackend  like DjangoFilterBackend
+It takes the query_param to filter map and enables filter option in list view.
 
 ## Installation
 ### Using pip
@@ -61,6 +61,3 @@ class ProfileViewSet(ModelViewSet):
     
 ```
 
-## TODOS
-1. Add test cases for FilterMapBackend
-2. Update Readme
