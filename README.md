@@ -18,7 +18,7 @@ Currently, drf-filtermapbackend is not released to PYPI. \
 So you can only install
 it directly from github by running
 ```shell
-pip install git+https://github.com/aayulogic/filtermapbackend@master
+pip install https://github.com/aayulogic/filtermapbackend/archive/master.zip
 ```
 ### Build using setup.py
 1. Clone the repo
@@ -36,7 +36,8 @@ python setup.py install
 ```
 
 ## Usage
-Example Usage
+You can use FilterMapBackend by adding it to your filter backends and setting filter_map attribute.
+For example
 ```python
 from rest_framework.viewsets import ModelViewSet
 from filter_map.backends import FilterMapBackend
@@ -61,3 +62,33 @@ class ProfileViewSet(ModelViewSet):
     
 ```
 
+You can also define `get_filter_map` method to return the filter map.
+This will allow you to change filter_map in runtime. Here's an example
+
+```python
+from rest_framework.viewsets import ModelViewSet
+from filter_map.backends import FilterMapBackend
+
+class ProfileViewSet(ModelViewSet):
+    """
+    Consider Profile Model has user FK,
+    """
+    queryset = ...
+    serializer_class = ...
+    filter_backends = (FilterMapBackend,)
+    
+    def get_filter_map(self):
+        # Disable joined_before filter for non staff users
+        if self.request.user.is_authenticated and self.request.user.is_staff:
+            return {
+                'first_name': 'user__first_name',
+                'joined_before': 'date_joined__date__lte',
+                'last_name': ('user__last_name', 'iexact'),
+            }
+        else:
+            return {
+                'first_name': 'user__first_name',
+                'last_name': ('user__last_name', 'iexact'),
+            }
+            
+```
