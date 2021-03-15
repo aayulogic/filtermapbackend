@@ -67,7 +67,7 @@ class FilterMapBackend(BaseFilterBackend):
     def get_raise_exception(self, view: GenericAPIView) -> bool:
         """Should return True/False, decides to raise ValidationError when bad data are sent to filter"""
         if hasattr(view, "get_raise_filter_exception"):
-            return view.get_raise_filter_exceptions()
+            return view.get_raise_filter_exception()
         return getattr(view, "raise_filter_exception", True)
 
     def get_filterset(self, request: Request, queryset: QuerySet, view: GenericAPIView) -> Union[FilterSet, None]:
@@ -77,10 +77,11 @@ class FilterMapBackend(BaseFilterBackend):
         filterset_class = self.get_filterset_class(view, self.get_filter_map(view))
         if filterset_class is None:
             return None
-        kwargs = self.get_filterset_kwargs(request, queryset, view)
+        kwargs = self.get_filterset_kwargs(request, queryset)
         return filterset_class(**kwargs)
 
-    def get_filterset_kwargs(self, request: Request, queryset: QuerySet, view: GenericAPIView) -> dict:
+    @staticmethod
+    def get_filterset_kwargs(request: Request, queryset: QuerySet) -> dict:
         """
         Returns kwargs for instantiating filterset
         """
@@ -124,7 +125,7 @@ class FilterMapBackend(BaseFilterBackend):
             template = loader.get_template(self.template)
             return template.render({
                 'filter': self.get_filterset_class(view, filter_map)(**self.get_filterset_kwargs(
-                    request, queryset, view))
+                    request, queryset))
             })
         else:
             return ''
@@ -155,6 +156,9 @@ class FilterMapBackend(BaseFilterBackend):
 
                 for name, filter_ in self.filters.items():
                     f = filter_.field
+
+                    # set label for field using filter_map
+                    # eg. if map is {"name": "profile__name"} then set label to "Name", by default it is "Profile Name"
                     f.label = pretty_name(val_to_name[name])
 
                     fields.update({val_to_name[name]: f})
