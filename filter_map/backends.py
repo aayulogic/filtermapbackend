@@ -62,7 +62,7 @@ class FilterMapBackend(BaseFilterBackend):
         define get_raise_filter_exception
 
     """
-    template = 'django_filters/rest_framework/form.html'
+    template = 'filter_map/form.html'
 
     def get_raise_exception(self, view: GenericAPIView) -> bool:
         """Should return True/False, decides to raise ValidationError when bad data are sent to filter"""

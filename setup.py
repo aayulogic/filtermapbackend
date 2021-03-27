@@ -5,7 +5,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='drf-filtermapbackend',
-    packages=find_packages(include=['filter_map']),
+    packages=find_packages(exclude=['tests*']),
+    include_package_data=True,
     version='0.0.1',
     description='FilterBackend which takes mapping of query params to field name.',
     long_description=long_description,
