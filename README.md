@@ -20,6 +20,15 @@ it directly from github by running
 ```shell
 pip install https://github.com/aayulogic/filtermapbackend/archive/master.zip
 ```
+Then include `filter_map` in your installed apps
+```python
+INSTALLED_APPS = [
+    ...,
+    'rest_framework',
+    'filter_map',
+    ...
+]
+```
 ### Build using setup.py
 1. Clone the repo
 ```shell
