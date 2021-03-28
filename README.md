@@ -13,12 +13,9 @@ FilterBackend which takes mapping of query params to field name.
 It takes the query_param to filter map and enables filter option in list view.
 
 ## Installation
-### Using pip
-Currently, drf-filtermapbackend is not released to PYPI. \
-So you can only install
-it directly from github by running
+Install `drf-filtermapbackend` using
 ```shell
-pip install https://github.com/aayulogic/filtermapbackend/archive/master.zip
+pip install drf-filtermapbackend
 ```
 Then include `filter_map` in your installed apps
 ```python
@@ -28,20 +25,6 @@ INSTALLED_APPS = [
     'filter_map',
     ...
 ]
-```
-### Build using setup.py
-1. Clone the repo
-```shell
-git clone https://github.com/aayulogic/filtermapbackend
-cd filtermapbackend
-```
-2. Install requirements
-```shell
-pip install -r requirementst.txt
-```
-3. Install using `setup.py`
-```shell
-python setup.py install
 ```
 
 ## Usage
