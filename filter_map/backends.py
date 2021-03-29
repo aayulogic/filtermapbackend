@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from typing import Union, Type, Tuple, List, ValuesView
+from typing import List, Tuple, Type, Union, ValuesView
 
 from django.db.models import QuerySet
 from django.forms.utils import pretty_name
@@ -7,10 +7,10 @@ from django.template import loader
 from django_filters import utils as dj_filters_utils
 from django_filters.rest_framework import FilterSet
 from rest_framework.filters import BaseFilterBackend
-from rest_framework.request import Request
 from rest_framework.generics import GenericAPIView
+from rest_framework.request import Request
 
-from .utils import inverse_mapping, get_applicable_filters
+from .utils import get_applicable_filters, inverse_mapping
 
 
 class FilterMapFilterSet(FilterSet):
