@@ -6,7 +6,7 @@ from django.http import HttpRequest
 from rest_framework.request import Request
 
 from filter_map.backends import FilterMapBackend, FilterMapFilterSet
-from tests.utils import ViewClass, GENDER_CHOICES, ProfileQuerySet
+from tests.utils import GENDER_CHOICES, ProfileQuerySet, ViewClass
 
 
 class FilterMapBackendTestCase(TestCase):
