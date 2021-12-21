@@ -197,7 +197,7 @@ class FilterMapBackend(BaseFilterBackend):
             return field_name[0], [field_name[1]]
 
         # just these for now, add more when needed
-        ops = ["date__gte", "date__lte", "gte", "lte", "gt", "lt"]
+        ops = ["date__gte", "date__lte", "gte", "lte", "gt", "lt", "isnull"]
         for op in ops:
             if f"__{op}" in field_name:
                 return field_name.replace(f"__{op}", ""), [op]

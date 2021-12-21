@@ -25,6 +25,7 @@ class FilterMapBackendTestCase(TestCase):
             ("field_name__lte", ("field_name", ["lte"])),
             ("field_name__gt", ("field_name", ["gt"])),
             ("field_name__lt", ("field_name", ["lt"])),
+            ("field_name__isnull", ("field_name", ["isnull"])),
 
             # tuple
             (("field_name", "exp"), ("field_name", ["exp"]))
@@ -40,13 +41,15 @@ class FilterMapBackendTestCase(TestCase):
             "field_name0",
             "field_name1__date__gte",
             "field_name2__lte",
-            ("field_name3", "iexact")
+            ("field_name3", "iexact"),
+            "field_name4__isnull"
         ]
         expected_output = {
             "field_name0": {"exact"},
             "field_name1": {"date__gte"},
             "field_name2": {"lte"},
-            "field_name3": {"iexact"}
+            "field_name3": {"iexact"},
+            "field_name4": {"isnull"},
         }
         output = FilterMapBackend.clean_field_names(input_values)
         self.assertEqual(output, expected_output)
